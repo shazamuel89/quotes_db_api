@@ -19,11 +19,11 @@
         public function getAuthor() {
             return $this->author;
         }
-        public function setId($id) {
-            $this->id = $id;
+        public function setId($id) {    // This also sanitizes input
+            $this->id = (int) $id;
         }
-        public function setAuthor($author) {
-            $this->author = $author;
+        public function setAuthor($author) {    // This also sanitizes input
+            $this->author = strip_tags(trim($author));
         }
 
         public function read() {
@@ -37,8 +37,7 @@
                     author;
             ';
             $stmt = $this->conn->prepare($query);   // Prepare statement
-            $stmt->execute();                       // Execute query
-            return $stmt;
+            return executeQuery($stmt);             // Execute query
         }
         public function read_single() {
             $query = '
@@ -52,19 +51,8 @@
                 LIMIT 1;
             ';
             $stmt = $this->conn->prepare($query);   // Prepare statement
-            $this->id = (int) $this->id;            // Clean data
-            $stmt->bindParam(':id', $this->id);     // Bind data
-            $stmt = executeQuery($stmt);            // Execute and get new $stmt (or assign false to $stmt if query fails)
-            if ($stmt === false) {                  // If query failed
-                return false;                       // Return false
-            }                                       // Otherwise, if query was successful (doesn't mean it necessarily found results)
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);  // Fetch the result of the query as an associative array            
-            if ($row) {                             // If there was a result found
-                $this->author = $row['author'];     // Assign author value of row to object property
-                return true;                        // Return true to indicate success and result found
-            } else {                                // If no result was found
-                return false;                       // Return false to indicate no result found
-            }
+            $stmt->bindValue(':id', $this->id);     // Bind data
+            return executeQuery($stmt);             // Execute and return result, or return false if query fails
         }
         public function create() {
             $query = '
@@ -74,9 +62,8 @@
                     author = :author;
             ';
             $stmt = $this->conn->prepare($query);                           // Prepare statement
-            $this->author = htmlspecialchars(strip_tags($this->author));    // Clean data
-            $stmt->bindParam(':author', $this->author);                     // Bind data
-            return executeQuery($stmt) !== false;                           // Execute query, if it works it returns $stmt, so return true, otherwise prints error and return false
+            $stmt->bindValue(':author', $this->author);                     // Bind data
+            return executeQuery($stmt);                                     // Execute query, if it works return $stmt, otherwise log error and return false
         }
         public function update() {
             $query = '
@@ -88,11 +75,9 @@
                     id = :id;
             ';
             $stmt = $this->conn->prepare($query);                           // Prepare statement
-            $this->author = htmlspecialchars(strip_tags($this->author));    // Clean data
-            $this->id = (int) $this->id;
-            $stmt->bindParam(':author', $this->author);                     // Bind data
-            $stmt->bindParam(':id', $this->id);
-            return executeQuery($stmt) !== false;                           // Execute query, if it works it returns $stmt, so return true, otherwise prints error and return false
+            $stmt->bindValue(':author', $this->author);                     // Bind data
+            $stmt->bindValue(':id', $this->id);                             // Bind data
+            return executeQuery($stmt);                                     // Execute query, if it works return $stmt, otherwise log error and return false
         }
         public function delete() {
             $query = '
@@ -102,9 +87,8 @@
                     id = :id;
             ';
             $stmt = $this->conn->prepare($query);   // Prepare statement
-            $this->id = (int) $this->id;            // Clean data
-            $stmt->bindParam(':id', $this->id);     // Bind data
-            return executeQuery($stmt) !== false;   // Execute query, if it works it returns $stmt, so return true, otherwise prints error and return false
+            $stmt->bindValue(':id', $this->id);     // Bind data
+            return executeQuery($stmt);             // Execute query, if it works return $stmt, otherwise log error and return false
         }
     }
 ?>
