@@ -1,0 +1,13 @@
+- In create and update quote, respond for { message: 'author_id Not Found' }
+- In create and update quote, respond for { message: 'category_id Not Found' }
+- In update and delete, respond for id not found
+- When author or category is deleted, go through quotes and find quotes that had that author_id/category_id and update them to 'Author Deleted'/'Category Deleted'
+- Change read to iterate through rows array and explicitly put each value into a key/value pair
+- Go through and find small repeated operations that can be extracted and modified into functions
+
+
+OPTIONAL
+- Allow a “random=true” parameter to be sent via GET request so the response received does not always
+contain the same quote. The response should contain a random quote that still adheres to the other specified
+parameters. For example, this will allow users of the API to retrieve a single random quote, a single random
+quote from Bill Gates (author), or a single random quote about life (category).

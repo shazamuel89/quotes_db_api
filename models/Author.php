@@ -59,7 +59,9 @@
                 INSERT INTO
                     ' . $this->table . '
                 SET
-                    author = :author;
+                    author = :author
+                RETURNING
+                    *;
             ';
             $stmt = $this->conn->prepare($query);                           // Prepare statement
             $stmt->bindValue(':author', $this->author);                     // Bind data
@@ -72,7 +74,9 @@
                 SET
                     author = :author
                 WHERE
-                    id = :id;
+                    id = :id
+                RETURNING
+                    *;
             ';
             $stmt = $this->conn->prepare($query);                           // Prepare statement
             $stmt->bindValue(':author', $this->author);                     // Bind data
@@ -84,7 +88,9 @@
                 DELETE FROM
                     ' . $this->table . '
                 WHERE
-                    id = :id;
+                    id = :id
+                RETURNING
+                    *;
             ';
             $stmt = $this->conn->prepare($query);   // Prepare statement
             $stmt->bindValue(':id', $this->id);     // Bind data

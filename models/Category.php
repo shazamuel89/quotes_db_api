@@ -59,7 +59,9 @@
                 INSERT INTO
                     ' . $this->table . '
                 SET
-                    category = :category;
+                    category = :category
+                RETURNING
+                    *;
             ';
             $stmt = $this->conn->prepare($query);                           // Prepare statement
             $stmt->bindValue(':category', $this->category);                 // Bind data
@@ -72,7 +74,9 @@
                 SET
                     category = :category
                 WHERE
-                    id = :id;
+                    id = :id
+                RETURNING
+                    *;
             ';
             $stmt = $this->conn->prepare($query);                           // Prepare statement
             $stmt->bindValue(':category', $this->category);                 // Bind data
@@ -84,7 +88,9 @@
                 DELETE FROM
                     ' . $this->table . '
                 WHERE
-                    id = :id;
+                    id = :id
+                RETURNING
+                    *;
             ';
             $stmt = $this->conn->prepare($query);   // Prepare statement
             $stmt->bindValue(':id', $this->id);     // Bind data

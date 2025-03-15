@@ -114,7 +114,9 @@
                 SET
                     quote = :quote,
                     author_id = :author_id,
-                    category_id = :category_id;
+                    category_id = :category_id
+                RETURNING
+                    *;
             ';
             $stmt = $this->conn->prepare($query);                   // Prepare statement
             $stmt->bindValue(':quote', $this->quote);               // Bind data
@@ -131,7 +133,9 @@
                     author_id = :author_id,
                     category_id = :category_id
                 WHERE
-                    id = :id;
+                    id = :id
+                RETURNING
+                    *;
             ';
             $stmt = $this->conn->prepare($query);                   // Prepare statement
             $stmt->bindValue(':quote', $this->quote);               // Bind data
@@ -145,7 +149,9 @@
                 DELETE FROM
                     ' . $this->table . '
                 WHERE
-                    id = :id;
+                    id = :id
+                RETURNING
+                    *;
             ';
             $stmt = $this->conn->prepare($query);   // Prepare statement
             $stmt->bindValue(':id', $this->id);     // Bind data
