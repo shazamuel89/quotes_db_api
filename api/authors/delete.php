@@ -16,7 +16,7 @@
     $data = json_decode(file_get_contents("php://input"));                      // Get JSON data of client's request from php://input, decode it into an object
     if (!isset($data->id)) {                                                    // If the id value wasn't provided
         http_response_code(400);                                                // Then set HTTP Status Code to 400 for Bad Request
-        die(json_encode(array('message' => 'Missing required id parameter')));  // Output missing id json message and kill script
+        die(json_encode(['message' => 'Missing required id parameter']));       // Output missing id json message and kill script
     }                                                                           // Verified id parameter was provided
     $database = new Database();                                                 // Instantiate a Database object
     $db = $database->connect();                                                 // Get the connection from the Database object
@@ -25,11 +25,15 @@
     $result = $author->delete();                                                // Delete author entry and get result
     if ($result === false) {                                                    // If deletion failed
         http_response_code(500);                                                // Then set HTTP Status Code to 500 for Internal Server Error
-        die(json_encode(array('message' => 'Author deletion failed.')));        // Output failure message in json
+        die(json_encode(['message' => 'Author deletion failed.']));             // Output failure message in json
     }                                                                           // Verified that author deletion succeeded
-    $row = $result->fetch(PDO::FETCH_ASSOC);                                    // Get the deleted row
-    $author_arr = array(                                                        // Create an array containing deleted author's data
-        'id' => $row['id']                                                      // Put in author's id value
-    );
-    echo json_encode(['data' => $author_arr]);                                  // Output in json an array where the key 'data' is pointing to a value which is the author's data
+    $author_arr = $result->fetch(PDO::FETCH_ASSOC);                             // Get the deleted row
+    if ($author_arr === false) {                                                // If query fetch returned false (meaning the id input did not match an author's id)
+        http_response_code(404);                                                // Then set HTTP Status Code to 404 for Not Found
+        die(json_encode(['message' => 'No author found.']));                    // Output no author found message and kill script
+    }
+    echo json_encode([
+        'message' => 'Author deleted.',
+        'data'    => $author_arr
+    ]);                                                                         // Output in json an array where the key 'data' is pointing to a value which is the author's data
 ?>

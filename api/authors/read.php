@@ -12,12 +12,15 @@
     $result = $author->read();                                          // Get $stmt (or false) from read() and put into $result
     if ($result === false) {                                            // If read() had an error
         http_response_code(500);                                        // Then set HTTP Status Code to 500 for Internal Server Error
-        die(json_encode(array('message' => 'Authors read failed.')));   // Output failure message in json and kill script
+        die(json_encode(['message' => 'Authors read failed.']));        // Output failure message in json and kill script
     }                                                                   // Verified that read() worked (not necessarily that it returned any rows)
-    $authors_arr = $result->fetchAll();                                 // Get array of associative arrays - each item in array is a row, and each key/value in the items is the column/value
-    if (count($authors_arr) <= 0) {                                     // If there were no results from read query
+    $authors_arr = $result->fetchAll(PDO::FETCH_ASSOC);                 // Get array of rows, each row as an associative array with key/value being the column/value
+    if (count($authors_arr) === 0) {                                    // If there were no results from read query
         http_response_code(404);                                        // Then set HTTP Status Code to 404 for Not Found
-        die(json_encode(array('message' => 'No authors found.')));      // Output no authors found message and kill script
+        die(json_encode(['message' => 'No authors found.']));           // Output no authors found message and kill script
     }                                                                   // Verified that rows were found
-    echo json_encode(['data' => $authors_arr]);                         // Output in json an array where the key 'data' is pointing to a value which is the array of rows
+    echo json_encode([
+        'message' => 'Authors found.',
+        'data'    => $authors_arr
+    ]);                                                                 // Output in json an array where the key 'data' is pointing to a value which is the array of rows
 ?>
