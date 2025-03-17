@@ -27,12 +27,15 @@
     $author = new Author($db);                                                  // Instantiate an Author object that has the connection to the Database object
     $author->setId($data->id);                                                  // Put id value from request into author object (and sanitize it)
     $author->setAuthor($data->author);                                          // Put author value from request into author object (and sanitize it)
-    $result = $author->update();                                                // Update author entry and get result
-    if ($result === false) {                                                    // If update failed
+    $resultArr = $author->update();                                             // Update author entry and get result array
+    if ($resultArr['success'] === false) {                                      // If update failed
         http_response_code(500);                                                // Then set HTTP Status Code to 500 for Internal Server Error
-        die(json_encode(['message' => 'Author update failed.']));               // Output failure message in json
+        die(json_encode([                                                       // Kill script while displaying a json encoded array
+            'message' => 'Author update failed.',                               // With a user readable message
+            'error'   => $resultArr['message']                                  // And a developer readable error message
+        ]));
     }                                                                           // Verified that author update succeeded
-    $author_arr = $result->fetch(PDO::FETCH_ASSOC);                             // Get the updated row
+    $author_arr = $resultArr['data']->fetch(PDO::FETCH_ASSOC);                  // Get the updated row
     if ($author_arr === false) {                                                // If query fetch returned false (meaning the id input did not match an author's id)
         http_response_code(404);                                                // Then set HTTP Status Code to 404 for Not Found
         die(json_encode(['message' => 'No author found.']));                    // Output no author found message and kill script

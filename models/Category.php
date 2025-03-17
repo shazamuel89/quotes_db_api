@@ -37,7 +37,7 @@
                     category;
             ';
             $stmt = $this->conn->prepare($query);   // Prepare statement
-            return executeQuery($stmt);             // Execute query
+            return executeQuery($stmt);             // Execute query, returning result array
         }
         public function read_single() {
             $query = '
@@ -51,8 +51,8 @@
                 LIMIT 1;
             ';
             $stmt = $this->conn->prepare($query);   // Prepare statement
-            $stmt->bindValue(':id', $this->id);     // Bind data
-            return executeQuery($stmt);             // Execute and return result, or return false if query fails
+            $stmt->bindValue(':id', $this->id);     // Bind id value
+            return executeQuery($stmt);             // Execute query, returning result array
         }
         public function create() {
             $query = '
@@ -63,9 +63,9 @@
                 RETURNING
                     *;
             ';
-            $stmt = $this->conn->prepare($query);                           // Prepare statement
-            $stmt->bindValue(':category', $this->category);                 // Bind data
-            return executeQuery($stmt);                                     // Execute query, if it works return $stmt, otherwise log error and return false
+            $stmt = $this->conn->prepare($query);           // Prepare statement
+            $stmt->bindValue(':category', $this->category); // Bind data
+            return executeQuery($stmt);                     // Execute query, returning result array
         }
         public function update() {
             $query = '
@@ -78,10 +78,10 @@
                 RETURNING
                     *;
             ';
-            $stmt = $this->conn->prepare($query);                           // Prepare statement
-            $stmt->bindValue(':category', $this->category);                 // Bind data
-            $stmt->bindValue(':id', $this->id);                             // Bind data
-            return executeQuery($stmt);                                     // Execute query, if it works return $stmt, otherwise log error and return false
+            $stmt = $this->conn->prepare($query);           // Prepare statement
+            $stmt->bindValue(':category', $this->category); // Bind category value
+            $stmt->bindValue(':id', $this->id);             // Bind id value
+            return executeQuery($stmt);                     // Execute query, returning result array
         }
         public function delete() {
             $query = '
@@ -93,8 +93,8 @@
                     *;
             ';
             $stmt = $this->conn->prepare($query);   // Prepare statement
-            $stmt->bindValue(':id', $this->id);     // Bind data
-            return executeQuery($stmt);             // Execute query, if it works return $stmt, otherwise log error and return false
+            $stmt->bindValue(':id', $this->id);     // Bind id value
+            return executeQuery($stmt);             // Execute query, returning result array
         }
     }
 ?>

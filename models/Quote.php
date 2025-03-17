@@ -66,7 +66,7 @@
                 $filters[] = 'category_id = :category_id';              // Put category condition for WHERE clause into filters array
             }
             if (count($filters) > 0) {                                  // If any conditions were put into filters array
-                $query .= ' WHERE ' . implode(' AND ', $filters);    // Append WHERE clause onto query along with any potential filters
+                $query .= ' WHERE ' . implode(' AND ', $filters);       // Append WHERE clause onto query along with any potential filters
             }
             $query .= '
                 ORDER BY
@@ -75,12 +75,12 @@
             ';                                                          // Then finish off query
             $stmt = $this->conn->prepare($query);                       // Prepare statement
             if (isset($this->author_id)) {                              // If author_id was specified
-                $stmt->bindValue(':author_id', $this->author_id);       // Bind data
+                $stmt->bindValue(':author_id', $this->author_id);       // Bind author_id value
             }
             if (isset($this->category_id)) {                            // If category_id was specified
-                $stmt->bindValue(':category_id', $this->category_id);   // Bind data
+                $stmt->bindValue(':category_id', $this->category_id);   // Bind category_id value
             }
-            return executeQuery($stmt);                                 // Execute and return result so api can handle with flexibility
+            return executeQuery($stmt);                                 // Execute query, returning result array
         }
         public function read_single() {
             $query = '
@@ -104,8 +104,8 @@
                 LIMIT 1;
             ';
             $stmt = $this->conn->prepare($query);   // Prepare statement
-            $stmt->bindValue(':id', $this->id);     // Bind data
-            return executeQuery($stmt);             // Execute and return result, or return false if query fails
+            $stmt->bindValue(':id', $this->id);     // Bind id value
+            return executeQuery($stmt);             // Execute query, returning result array
         }
         public function create() {
             $query = '
@@ -119,10 +119,10 @@
                     *;
             ';
             $stmt = $this->conn->prepare($query);                   // Prepare statement
-            $stmt->bindValue(':quote', $this->quote);               // Bind data
-            $stmt->bindValue(':author_id', $this->author_id);       // Bind data
-            $stmt->bindValue(':category_id', $this->category_id);   // Bind data
-            return executeQuery($stmt);                             // Execute query, if it works return $stmt, otherwise log error and return false
+            $stmt->bindValue(':quote', $this->quote);               // Bind quote value
+            $stmt->bindValue(':author_id', $this->author_id);       // Bind author_id value
+            $stmt->bindValue(':category_id', $this->category_id);   // Bind category_id value
+            return executeQuery($stmt);                             // Execute query, returning result array
         }
         public function update() {
             $query = '
@@ -138,11 +138,11 @@
                     *;
             ';
             $stmt = $this->conn->prepare($query);                   // Prepare statement
-            $stmt->bindValue(':quote', $this->quote);               // Bind data
-            $stmt->bindValue(':author_id', $this->author_id);       // Bind data
-            $stmt->bindValue(':category_id', $this->category_id);   // Bind data
-            $stmt->bindValue(':id', $this->id);                     // Bind data
-            return executeQuery($stmt);                             // Execute query, if it works return $stmt, otherwise log error and return false
+            $stmt->bindValue(':quote', $this->quote);               // Bind quote value
+            $stmt->bindValue(':author_id', $this->author_id);       // Bind author_id value
+            $stmt->bindValue(':category_id', $this->category_id);   // Bind category_id value
+            $stmt->bindValue(':id', $this->id);                     // Bind id value
+            return executeQuery($stmt);                             // Execute query, returning result array
         }
         public function delete() {
             $query = '
@@ -154,8 +154,8 @@
                     *;
             ';
             $stmt = $this->conn->prepare($query);   // Prepare statement
-            $stmt->bindValue(':id', $this->id);     // Bind data
-            return executeQuery($stmt);             // Execute query, if it works return $stmt, otherwise log error and return false
+            $stmt->bindValue(':id', $this->id);     // Bind id value
+            return executeQuery($stmt);             // Execute query, returning result array
         }
     }
 ?>
