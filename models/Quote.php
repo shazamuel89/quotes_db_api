@@ -1,5 +1,5 @@
 <?php
-    require_once '../functions/database.php';   // Include this for the executeQuery($stmt) function
+    require_once '../functions/model.php';   // Include this for the executeQuery($stmt) function
     class Quote {
         private $conn;
         private $table = 'quotes';
@@ -108,7 +108,35 @@
             return executeQuery($stmt);             // Execute query, returning result array
         }
         public function create() {
-            $query = '
+            $authorValidationArr = validateForeignKey($this->conn, 'authors', $this->author_id);        // Validate that author matching author_id exists
+            if ($authorValidationArr['success'] === false) {                                            // If validation failed
+                if ($authorValidationArr['error type'] === 'execution error') {                         // And if the error type was execution error
+                    return [                                                                            // Return result array
+                        'success'    => false,                                                          // Indicating failure
+                        'error type' => 'author_id validation execution error',                         // Providing the error type
+                        'message'    => $authorValidationArr['error']                                   // And the error message
+                    ];
+                }                                                                                       // Verified that error did not occur during query execution, confirmed no rows found
+                return [                                                                                // Return the result array
+                    'success'    => false,                                                              // Indicating failure
+                    'error type' => 'author_id not matching'                                            // Providing the error type
+                ];
+            }                                                                                           // Verified that author matching author_id exists
+            $categoryValidationArr = validateForeignKey($this->conn, 'categories', $this->category_id); // Validate that category matching category_id exists
+            if ($categoryValidationArr['success'] === false) {                                          // If validation failed
+                if ($categoryValidationArr['error type'] === 'execution error') {                       // And if the error type was execution error
+                    return [                                                                            // Return result array
+                        'success'    => false,                                                          // Indicating failure
+                        'error type' => 'category_id validation execution error',                       // Providing the error type
+                        'message'    => $categoryValidationArr['error']                                 // And the error message
+                    ];
+                }                                                                                       // Verified that error did not occur during query execution, confirmed no rows found
+                return [                                                                                // Return the result array
+                    'success'    => false,                                                              // Indicating failure
+                    'error type' => 'category_id not matching'                                          // Providing the error type
+                ];
+            }                                                                                           // Verified that category matching category_id exists
+            $createQuery = '
                 INSERT INTO
                     ' . $this->table . '
                 SET
@@ -117,14 +145,42 @@
                     category_id = :category_id
                 RETURNING
                     *;
-            ';
-            $stmt = $this->conn->prepare($query);                   // Prepare statement
-            $stmt->bindValue(':quote', $this->quote);               // Bind quote value
-            $stmt->bindValue(':author_id', $this->author_id);       // Bind author_id value
-            $stmt->bindValue(':category_id', $this->category_id);   // Bind category_id value
-            return executeQuery($stmt);                             // Execute query, returning result array
+            ';                                                                                          // This is the main create query
+            $stmt = $this->conn->prepare($createQuery);                                                 // Prepare statement
+            $stmt->bindValue(':quote', $this->quote);                                                   // Bind quote value
+            $stmt->bindValue(':author_id', $this->author_id);                                           // Bind author_id value
+            $stmt->bindValue(':category_id', $this->category_id);                                       // Bind category_id value
+            return executeQuery($stmt);                                                                 // Execute query, returning result array
         }
         public function update() {
+            $authorValidationArr = validateForeignKey($this->conn, 'authors', $this->author_id);        // Validate that author matching author_id exists
+            if ($authorValidationArr['success'] === false) {                                            // If validation failed
+                if ($authorValidationArr['error type'] === 'execution error') {                         // And if the error type was execution error
+                    return [                                                                            // Return result array
+                        'success'    => false,                                                          // Indicating failure
+                        'error type' => 'author_id validation execution error',                         // Providing the error type
+                        'message'    => $authorValidationArr['error']                                   // And the error message
+                    ];
+                }                                                                                       // Verified that error did not occur during query execution, confirmed no rows found
+                return [                                                                                // Return the result array
+                    'success'    => false,                                                              // Indicating failure
+                    'error type' => 'author_id not matching'                                            // Providing the error type
+                ];
+            }                                                                                           // Verified that author matching author_id exists
+            $categoryValidationArr = validateForeignKey($this->conn, 'categories', $this->category_id); // Validate that category matching category_id exists
+            if ($categoryValidationArr['success'] === false) {                                          // If validation failed
+                if ($categoryValidationArr['error type'] === 'execution error') {                       // And if the error type was execution error
+                    return [                                                                            // Return result array
+                        'success'    => false,                                                          // Indicating failure
+                        'error type' => 'category_id validation execution error',                       // Providing the error type
+                        'message'    => $categoryValidationArr['error']                                 // And the error message
+                    ];
+                }                                                                                       // Verified that error did not occur during query execution, confirmed no rows found
+                return [                                                                                // Return the result array
+                    'success'    => false,                                                              // Indicating failure
+                    'error type' => 'category_id not matching'                                          // Providing the error type
+                ];
+            }                                                                                           // Verified that category matching category_id exists
             $query = '
                 UPDATE
                     ' . $this->table . '
@@ -136,7 +192,7 @@
                     id = :id
                 RETURNING
                     *;
-            ';
+            ';                                                      // This is the main update query
             $stmt = $this->conn->prepare($query);                   // Prepare statement
             $stmt->bindValue(':quote', $this->quote);               // Bind quote value
             $stmt->bindValue(':author_id', $this->author_id);       // Bind author_id value
