@@ -1,6 +1,3 @@
-- When author or category is deleted, go through quotes and find quotes that had that author_id/category_id and update them to 'Author Deleted'/'Category Deleted'
-- Go through and find small repeated operations that can be extracted and modified into functions
-
 OPTIONAL
 - Allow a “random=true” parameter to be sent via GET request so the response received does not always
 contain the same quote. The response should contain a random quote that still adheres to the other specified

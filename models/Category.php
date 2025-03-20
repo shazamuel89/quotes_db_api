@@ -1,5 +1,5 @@
 <?php
-    require_once '../functions/model.php';   // Include this for the executeQuery($stmt) function
+    require_once '../functions/model.php';
     class Category {
         private $conn;
         private $table = 'categories';

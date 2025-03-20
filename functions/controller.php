@@ -59,14 +59,11 @@
     ];
     
     function verifyResult($resultArr, $userMessage) {
-        if ($resultArr['success'] === false) {                                  // If query failed
-            $errorTypeArr = $errorTypesData[$resultArr['error type']];          // Get individual error type's data
-            if (array_key_exists('message', $resultArr)) {                      // If the result array had an error code attached to it
-                return getError($errorTypeArr, $userMessage, $errorMessage);    // Return the error with the error code
-            }                                                                   // Verified the result array had no error code
-            return getError($errorTypeArr, $userMessage);                       // Return the error
-        }                                                                       // Verified the query was a success
-        return true;                                                            // Return true
+        if ($resultArr['success'] === false) {                                          // If query failed
+            $errorTypeArr = $errorTypesData[$resultArr['error type']];                  // Get individual error type's data
+            return getError($errorTypeArr, $userMessage, $resultArr['message'] ?? '');  // Return the error
+        }                                                                               // Verified the query was a success
+        return true;                                                                    // Return true
     }
 
     function getError($errorTypeArr, $userMessage, $errorMessage = '') {
