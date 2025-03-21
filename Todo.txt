@@ -3,3 +3,5 @@ OPTIONAL
 contain the same quote. The response should contain a random quote that still adheres to the other specified
 parameters. For example, this will allow users of the API to retrieve a single random quote, a single random
 quote from Bill Gates (author), or a single random quote about life (category).
+
+- Create a welcome page on root index.php page with instructions for using api
