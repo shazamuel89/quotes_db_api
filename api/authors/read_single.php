@@ -16,7 +16,7 @@
     $database = new Database();                                                     // Instantiate a Database object
     $db = $database->connect();                                                     // Get the connection from the Database object
     $author = new Author($db);                                                      // Instantiate an Author object that has the connection to the Database object
-    $author->setId($_GET['id']);                                                    // Set author object's id (and sanitize it)
+    $author->setId($_GET['id']);                                                    // Set Author object's id (and sanitize it)
     $resultArr = $author->read_single();                                            // Get result array
     if ($resultArr['success'] === false) {                                          // If query failed
         $errorTypeArr = $errorTypesData[$resultArr['error type']];                  // Get individual error type's data

@@ -28,8 +28,8 @@
     $database = new Database();                                                     // Instantiate a Database object
     $db = $database->connect();                                                     // Get the connection from the Database object
     $author = new Author($db);                                                      // Instantiate an Author object that has the connection to the Database object
-    $author->setId($data->id);                                                      // Put id value from request into author object (and sanitize it)
-    $author->setAuthor($data->author);                                              // Put author value from request into author object (and sanitize it)
+    $author->setId($data->id);                                                      // Put id value from request into Author object (and sanitize it)
+    $author->setAuthor($data->author);                                              // Put author value from request into Author object (and sanitize it)
     $resultArr = $author->update();                                                 // Update author entry and get result array
     if ($resultArr['success'] === false) {                                          // If query failed
         $errorTypeArr = $errorTypesData[$resultArr['error type']];                  // Get individual error type's data
