@@ -10,9 +10,9 @@
             Authorization,
             X-Requested-With');
     
-    require_once '../../config/Database.php';
-    require_once '../../functions/controller.php';
-    require_once '../../models/Quote.php';
+    require_once __DIR__ . '/../../config/Database.php';
+    require_once __DIR__ . '/../../functions/controller.php';
+    require_once __DIR__ . '/../../models/Quote.php';
 
     define('USER_MESSAGE', 'Quote creation failed.');                               // This is a constant that defines what user readable message is output for errors
 

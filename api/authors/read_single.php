@@ -3,9 +3,9 @@
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
 
-    include_once '../../config/Database.php';
-    require_once '../../functions/controller.php';
-    include_once '../../models/Author.php';
+    require_once __DIR__ . '/../../config/Database.php';
+    require_once __DIR__ . '/../../functions/controller.php';
+    require_once __DIR__ . '/../../models/Author.php';
 
     define('USER_MESSAGE', 'Author lookup failed.');                                // This is a constant that defines what user readable message is output for errors
 

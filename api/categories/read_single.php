@@ -3,9 +3,9 @@
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
 
-    include_once '../../config/Database.php';
-    require_once '../../functions/controller.php';
-    include_once '../../models/Category.php';
+    require_once __DIR__ . '/../../config/Database.php';
+    require_once __DIR__ . '/../../functions/controller.php';
+    require_once __DIR__ . '/../../models/Category.php';
 
     define('USER_MESSAGE', 'Category lookup failed.');                              // This is a constant that defines what user readable message is output for errors
 

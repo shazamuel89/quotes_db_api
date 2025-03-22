@@ -41,7 +41,7 @@ class Database {
     
     private $host = 'localhost';
     private $port = '5432';
-    private $db_name = 'quotesdb';
+    private $db_name = 'postgres';
     private $username = 'postgres';
     private $password = 'postgres';
     private $conn;

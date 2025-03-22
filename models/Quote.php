@@ -1,5 +1,5 @@
 <?php
-    require_once '../functions/model.php';
+    require_once __DIR__ . '/../functions/model.php';
     class Quote {
         private $conn;
         private $table = 'quotes';
