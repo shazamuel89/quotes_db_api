@@ -58,8 +58,9 @@
             $query = '
                 INSERT INTO
                     ' . $this->table . '
-                SET
-                    author = :author
+                    (author)
+                VALUES
+                    (:author)
                 RETURNING
                     *;
             ';

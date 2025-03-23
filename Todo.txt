@@ -6,3 +6,4 @@ quote from Bill Gates (author), or a single random quote about life (category).
 
 - Create a welcome page on root index.php page with instructions for using api
 - Add description comments for functions in controller.php
+- Try making code in the index.phps a function if possible

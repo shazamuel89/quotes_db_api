@@ -139,10 +139,9 @@
             $createQuery = '
                 INSERT INTO
                     ' . $this->table . '
-                SET
-                    quote = :quote,
-                    author_id = :author_id,
-                    category_id = :category_id
+                    (quote, author_id, category_id)
+                VALUES
+                    (:quote, :author_id, :category_id)
                 RETURNING
                     *;
             ';                                                                                          // This is the main create query

@@ -58,8 +58,9 @@
             $query = '
                 INSERT INTO
                     ' . $this->table . '
-                SET
-                    category = :category
+                    (category)
+                VALUES
+                    (:category)
                 RETURNING
                     *;
             ';
