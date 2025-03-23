@@ -1,4 +1,9 @@
 <?php
+    /*
+        This array is meant to centralize and simplify the error feedback for this api.
+        The api scripts can access specific messages and http_response_codes for various situations using the defined error types as keys.
+        There may be a better, more procedural way to do it if the number of error types gets too large, but for this scope, it is not necessarily worth it.
+    */
     $errorTypesData = [
         'execution error'                           =>  [
                                                             'http_response_code'    =>  500,
@@ -58,6 +63,12 @@
                                                         ]
     ];
     
+    /*
+        verifyResult accepts an associative array with a key 'success' that is a boolean.
+        It also takes a string for the user message.
+        If the array's 'success' value is false, then the function gets the error type, calls the getError function, and returns the result.
+        If the array's 'success' value is true, then the function simply returns true.
+    */
     function verifyResult($resultArr, $userMessage) {
         if ($resultArr['success'] === false) {                                          // If query failed
             $errorTypeArr = $errorTypesData[$resultArr['error type']];                  // Get individual error type's data
@@ -66,6 +77,10 @@
         return true;                                                                    // Return true
     }
 
+    /*
+        getError accepts an associative array containing the specific error type's information, a string for the user message, and an optional error message string.
+        It sets the correct http_response_code for the error type, and then it returns the json encoded array containing the information needed to give feedback for the error.
+    */
     function getError($errorTypeArr, $userMessage, $errorMessage = '') {
         http_response_code($errorTypeArr['http_response_code']);        // Set HTTP Status Code to appropriate value
         return json_encode([                                            // Return a json encoded array
