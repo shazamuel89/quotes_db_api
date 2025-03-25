@@ -19,7 +19,7 @@
     // Verify input parameters were provided
     if (!isset($data->category)) {                                                  // If the category value wasn't provided
         $errorTypeArr = $errorTypesData['missing category parameter'];              // Get individual error type's data
-        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        echo getError($errorTypeArr, 'Missing Required Parameters');                                 // Output error message
         exit();                                                                     // Exit script
     }                                                                               // Verified category parameter was provided
     

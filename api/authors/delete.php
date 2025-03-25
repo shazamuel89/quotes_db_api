@@ -45,11 +45,13 @@
     // Verify results were fetched
     if ($authorArr === false) {                                                     // If query fetch returned false (meaning the id input did not match an author's id)
         $errorTypeArr = $errorTypesData['author not found'];                        // Get individual error type's data
-        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        echo getError($errorTypeArr, 'No Authors Found');                                 // Output error message
         exit();                                                                     // Exit script
     }                                                                               // Verified that an author was found and deleted
     
     // Signal success and output results
     http_response_code(200);                                                        // Set http status code to 200 for OK
-    echo json_encode($authorArr);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the author's data
+    echo json_encode([
+        'id'    =>  $authorArr['id']
+    ]);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the author's data
 ?>

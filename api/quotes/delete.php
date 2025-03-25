@@ -45,11 +45,13 @@
     // Verify results were fetched
     if ($quoteArr === false) {                                                      // If query fetch returned false (meaning the id input did not match a quote's id)
         $errorTypeArr = $errorTypesData['quote not found'];                         // Get individual error type's data
-        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        echo getError($errorTypeArr, 'No Quotes Found');                                 // Output error message
         exit();                                                                     // Exit script
     }                                                                               // Verified that a quote was found and deleted
     
     // Signal success and output results
     http_response_code(200);                                                        // Set http status code to 200 for OK
-    echo json_encode($quoteArr);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the quote's data
+    echo json_encode([
+        'id'    =>  $quoteArr['id']
+    ]);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the quote's data
 ?>

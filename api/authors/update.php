@@ -19,12 +19,12 @@
     // Verify input parameters were provided
     if (!isset($data->id)) {                                                        // If the id value wasn't provided
         $errorTypeArr = $errorTypesData['missing id parameter'];                    // Get individual error type's data
-        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        echo getError($errorTypeArr, 'Missing Required Parameters');                                 // Output error message
         exit();                                                                     // Exit script
     }                                                                               // Verified id parameter was provided
     if (!isset($data->author)) {                                                    // If the author value wasn't provided
         $errorTypeArr = $errorTypesData['missing author parameter'];                // Get individual error type's data
-        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        echo getError($errorTypeArr, 'Missing Required Parameters');                                 // Output error message
         exit();                                                                     // Exit script
     }                                                                               // Verified author parameter was provided
     

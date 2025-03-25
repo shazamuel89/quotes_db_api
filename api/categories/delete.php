@@ -45,11 +45,13 @@
     // Verify results were fetched
     if ($categoryArr === false) {                                                   // If query fetch returned false (meaning the id input did not match a category's id)
         $errorTypeArr = $errorTypesData['category not found'];                      // Get individual error type's data
-        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        echo getError($errorTypeArr, 'No Categories Found');                                 // Output error message
         exit();                                                                     // Exit script
     }                                                                               // Verified that a category was found and deleted
     
     // Signal success and output results
     http_response_code(200);                                                        // Set http status code to 200 for OK
-    echo json_encode($categoryArr);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the category's data
+    echo json_encode([
+        'id'    =>  $categoryArr['id']
+    ]);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the category's data
 ?>

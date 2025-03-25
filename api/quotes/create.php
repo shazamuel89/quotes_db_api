@@ -19,16 +19,16 @@
     // Verify input parameters were provided
     if (!isset($data->quote)) {                                                     // If the quote value wasn't provided
         $errorTypeArr = $errorTypesData['missing quote parameter'];                 // Get individual error type's data
-        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        echo getError($errorTypeArr, 'Missing Required Parameters');                                 // Output error message
         exit();                                                                     // Exit script
     }                                                                               // Verified quote parameter was provided
     if (!isset($data->author_id)) {                                                 // If the author_id value wasn't provided
-        $errorTypeArr = $errorTypesData['missing author_id parameter'];             // Get individual error type's data
+        $errorTypeArr = $errorTypesData['Missing Required Parameters'];             // Get individual error type's data
         echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
         exit();                                                                     // Exit script
     }                                                                               // Verified author_id parameter was provided
     if (!isset($data->category_id)) {                                               // If the category_id value wasn't provided
-        $errorTypeArr = $errorTypesData['missing category_id parameter'];           // Get individual error type's data
+        $errorTypeArr = $errorTypesData['Missing Required Parameters'];           // Get individual error type's data
         echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
         exit();                                                                     // Exit script
     }                                                                               // Verified category_id parameter was provided
@@ -47,7 +47,17 @@
     // Verify success
     if ($resultArr['success'] === false) {                                          // If query failed
         $errorTypeArr = $errorTypesData[$resultArr['error type']];                  // Get individual error type's data
-        echo getError($errorTypeArr, USER_MESSAGE, $resultArr['message'] ?? '');    // Output the error
+        switch ($resultArr['error type']) {
+            case 'author_id not matching':
+                echo getError($errorTypeArr, 'author_id Not Found', $resultArr['message'] ?? '');    // Output the error
+                break;
+            case 'category_id not matching':
+                echo getError($errorTypeArr, 'category_id Not Found', $resultArr['message'] ?? '');    // Output the error
+                break;
+            default:
+                echo getError($errorTypeArr, 'A database error occurred', $resultArr['message'] ?? '');    // Output the error
+                break;
+        }
         exit();                                                                     // Exit the script
     }                                                                               // Verified the query was a success
     
