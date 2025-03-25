@@ -1,12 +1,12 @@
 <?php
-    header('Access-Control-Allow-Origins: *');
+    header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
 
     $method = $_SERVER['REQUEST_METHOD'];                                                           // Get the request method
 
     switch ($method) {
         case 'OPTIONS':                                                                             // For request method OPTIONS
-            header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');                         // Allow main methods
+            header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');                         // Allow main methods
             header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With'); // Allow headers
             exit();                                                                                 // Stop script
             break;
