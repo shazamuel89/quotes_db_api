@@ -10,63 +10,48 @@
     require_once __DIR__ . '/../../functions/controller.php';
     require_once __DIR__ . '/../../models/Quote.php';
 
-    // Define constants
-    define('USER_MESSAGE', 'Quote creation failed.');                               // This is a constant that defines what user readable message is output for errors
-
     // Get input parameters
-    $data = json_decode(file_get_contents("php://input"));                          // Get JSON data of client's request from php://input, decode it into an object
+    $input = json_decode(file_get_contents("php://input"));     // Get JSON data of client's request from php://input, decode it into an object
     
     // Verify input parameters were provided
-    if (!isset($data->quote)) {                                                     // If the quote value wasn't provided
-        $errorTypeArr = $errorTypesData['missing quote parameter'];                 // Get individual error type's data
-        echo getError($errorTypeArr, 'Missing Required Parameters');                                 // Output error message
-        exit();                                                                     // Exit script
-    }                                                                               // Verified quote parameter was provided
-    if (!isset($data->author_id)) {                                                 // If the author_id value wasn't provided
-        $errorTypeArr = $errorTypesData['missing author_id parameter'];             // Get individual error type's data
-        echo getError($errorTypeArr, 'Missing Required Parameters');                                 // Output error message
-        exit();                                                                     // Exit script
-    }                                                                               // Verified author_id parameter was provided
-    if (!isset($data->category_id)) {                                               // If the category_id value wasn't provided
-        $errorTypeArr = $errorTypesData['missing category_id parameter'];           // Get individual error type's data
-        echo getError($errorTypeArr, 'Missing Required Parameters');                                 // Output error message
-        exit();                                                                     // Exit script
-    }                                                                               // Verified category_id parameter was provided
+    if (!isset($input->quote) ||                                // If the quote, author_id, or category_id values weren't provided
+        !isset($input->author_id) ||
+        !isset($input->category_id)
+    ) {
+        echo json_encode([
+            'message'   =>  'Missing Required Parameters'       // Output error message
+        ]);
+        exit();                                                 // Exit script
+    }                                                           // Verified quote, author_id, and category_id parameters were provided
     
     // Declare and initialize objects we are using
-    $database = new Database();                                                     // Instantiate a Database object
-    $db = $database->connect();                                                     // Get the connection from the Database object
-    $quote = new Quote($db);                                                        // Instantiate a Quote object that has the connection to the Database object
-    $quote->setQuote($data->quote);                                                 // Put quote value from request into Quote object (and sanitize it)
-    $quote->setAuthor_id($data->author_id);                                         // Put author_id value from request into Quote object (and sanitize it)
-    $quote->setCategory_id($data->category_id);                                     // Put category_id value from request into Quote object (and sanitize it)
+    $database = new Database();                                 // Instantiate a Database object
+    $db = $database->connect();                                 // Get the connection from the Database object
+    $quote = new Quote($db);                                    // Instantiate a Quote object that has the connection to the Database object
+    $quote->setQuote($input->quote);                            // Put quote value from request into Quote object (and sanitize it)
+    $quote->setAuthor_id($input->author_id);                    // Put author_id value from request into Quote object (and sanitize it)
+    $quote->setCategory_id($input->category_id);                // Put category_id value from request into Quote object (and sanitize it)
     
-    // Execute request
-    $resultArr = $quote->create();                                                  // Create quote entry and get result array
-    
-    // Verify success
-    if ($resultArr['success'] === false) {                                          // If query failed
-        $errorTypeArr = $errorTypesData[$resultArr['error type']];                  // Get individual error type's data
-        switch ($resultArr['error type']) {
-            case 'author_id not matching':
-                echo getError($errorTypeArr, 'author_id Not Found', $resultArr['message'] ?? '');    // Output the error
-                break;
-            case 'category_id not matching':
-                echo getError($errorTypeArr, 'category_id Not Found', $resultArr['message'] ?? '');    // Output the error
-                break;
-            default:
-                echo getError($errorTypeArr, 'A database error occurred', $resultArr['message'] ?? '');    // Output the error
-                break;
-        }
-        exit();                                                                     // Exit the script
-    }                                                                               // Verified the query was a success
+    try {
+        // Execute request
+        $result = $quote->create();                             // Create quote entry and get result
+    } catch (PDOException $e) {                                 // If a database error occurred
+        echo json_encode([
+            'message'   =>  'A database error occurred: ' . $e  // Output the error message
+        ]);
+        exit();                                                 // And exit the script
+    } catch (Exception $e) {                                    // If another error occurred (most likely meaning author_id or category_id not matching)
+        echo json_encode([
+            'message'   =>  $e                                  // Output the error message
+        ]);
+        exit();                                                 // And exit the script
+    }
     
     // Fetch results
-    $quoteArr = $resultArr['data']->fetch(PDO::FETCH_ASSOC);                        // Get the newly created row from the PDOStatement object in the result array
+    $quoteArr = $result->fetch(PDO::FETCH_ASSOC);               // Get the newly created row from the PDOStatement object in the result
     
     // No need to verify results were fetched, because if create query didn't return a result, then create query must have failed which would have been caught earlier
     
-    // Signal success and output results
-    http_response_code(201);                                                        // Set the http status code to 201 for successful POST
-    echo json_encode($quoteArr);                                                    // Output in json an array where the key 'data' is pointing to a value which is the quote's data
+    // Output results
+    echo json_encode($quoteArr);                                // Output in json an array containing the quote's data
 ?>

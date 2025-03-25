@@ -10,41 +10,43 @@
     require_once __DIR__ . '/../../functions/controller.php';
     require_once __DIR__ . '/../../models/Author.php';
 
-    // Define constants
-    define('USER_MESSAGE', 'Author creation failed.');                              // This is a constant that defines what user readable message is output for errors
-
     // Get input parameters
-    $data = json_decode(file_get_contents("php://input"));                          // Get JSON data of client's request from php://input, decode it into an object
+    $input = json_decode(file_get_contents("php://input"));     // Get JSON data of client's request from php://input, decode it into an object
     
     // Verify input parameters were provided
-    if (!isset($data->author)) {                                                    // If the author value wasn't provided
-        $errorTypeArr = $errorTypesData['missing author parameter'];                // Get individual error type's data
-        echo getError($errorTypeArr, 'Missing Required Parameters');                                 // Output error message
-        exit();                                                                     // Exit script
-    }                                                                               // Verified author parameter was provided
+    if (!isset($input->author)) {                               // If the author value wasn't provided
+        echo json_encode([
+            'message'   =>  'Missing Required Parameters'       // Output error message
+        ]);
+        exit();                                                 // Exit script
+    }                                                           // Verified author parameter was provided
     
     // Declare and initialize objects we are using
-    $database = new Database();                                                     // Instantiate a Database object
-    $db = $database->connect();                                                     // Get the connection from the Database object
-    $author = new Author($db);                                                      // Instantiate an Author object that has the connection to the Database object
-    $author->setAuthor($data->author);                                              // Put author value from request into Author object (and sanitize it)
+    $database = new Database();                                 // Instantiate a Database object
+    $db = $database->connect();                                 // Get the connection from the Database object
+    $author = new Author($db);                                  // Instantiate an Author object that has the connection to the Database object
+    $author->setAuthor($input->author);                         // Put author value from request into Author object (and sanitize it)
     
     // Execute request
-    $resultArr = $author->create();                                                 // Create author entry and get result array
-    
-    // Verify success
-    if ($resultArr['success'] === false) {                                          // If query failed
-        $errorTypeArr = $errorTypesData[$resultArr['error type']];                  // Get individual error type's data
-        echo getError($errorTypeArr, USER_MESSAGE, $resultArr['message'] ?? '');    // Output the error
-        exit();                                                                     // Exit the script
-    }                                                                               // Verified the query was a success
+    try {
+        $result = $author->create();                            // Create author entry and get result
+    } catch (PDOException $e) {                                 // If an error occurred
+        echo json_encode([
+            'message'   =>  'A database error occurred: ' . $e  // Output the error message
+        ]);
+        exit();                                                 // And exit the script
+    } catch (Exception $e) {                                    // If another error occurred
+        echo json_encode([
+            'message'   =>  $e                                  // Output the error message
+        ]);
+        exit();                                                 // And exit the script
+    }
     
     // Fetch results
-    $authorArr = $resultArr['data']->fetch(PDO::FETCH_ASSOC);                       // Get the newly created row from the PDOStatement object in the result array
+    $authorArr = $result->fetch(PDO::FETCH_ASSOC);              // Get the newly created row from the PDOStatement object in the result
     
     // No need to verify results were fetched, because if create query didn't return a result, then create query must have failed which would have been caught earlier
     
     // Signal success and output results
-    http_response_code(201);                                                        // Set the http status code to 201 for successful POST
-    echo json_encode($authorArr);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the author's data
+    echo json_encode($authorArr);                               // Output in json an array where the key 'data' is pointing to a value which is the author's data
 ?>

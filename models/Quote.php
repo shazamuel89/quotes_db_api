@@ -98,7 +98,7 @@
             }
             
             // Execute query
-            return executeQuery($stmt);                                 // Execute query, returning result array
+            return $stmt->execute();                                    // Execute query, returning result
         }
         public function read_single() {
             // Initialize query
@@ -130,38 +130,16 @@
             $stmt->bindValue(':id', $this->id);     // Bind id value
             
             // Execute query
-            return executeQuery($stmt);             // Execute query, returning result array
+            return $stmt->execute();                // Execute query, returning result
         }
         public function create() {
             // Validate foreign keys
-            $authorValidationArr = validateForeignKey($this->conn, 'authors', $this->author_id);        // Validate that author matching author_id exists
-            if ($authorValidationArr['success'] === false) {                                            // If validation failed
-                if ($authorValidationArr['error type'] === 'execution error') {                         // And if the error type was execution error
-                    return [                                                                            // Return result array
-                        'success'    => false,                                                          // Indicating failure
-                        'error type' => 'author_id validation execution error',                         // Providing the error type
-                        'message'    => $authorValidationArr['error']                                   // And the error message
-                    ];
-                }                                                                                       // Verified that error did not occur during query execution, confirmed no rows found
-                return [                                                                                // Return the result array
-                    'success'    => false,                                                              // Indicating failure
-                    'error type' => 'author_id not matching'                                            // Providing the error type
-                ];
-            }                                                                                           // Verified that author matching author_id exists
-            $categoryValidationArr = validateForeignKey($this->conn, 'categories', $this->category_id); // Validate that category matching category_id exists
-            if ($categoryValidationArr['success'] === false) {                                          // If validation failed
-                if ($categoryValidationArr['error type'] === 'execution error') {                       // And if the error type was execution error
-                    return [                                                                            // Return result array
-                        'success'    => false,                                                          // Indicating failure
-                        'error type' => 'category_id validation execution error',                       // Providing the error type
-                        'message'    => $categoryValidationArr['error']                                 // And the error message
-                    ];
-                }                                                                                       // Verified that error did not occur during query execution, confirmed no rows found
-                return [                                                                                // Return the result array
-                    'success'    => false,                                                              // Indicating failure
-                    'error type' => 'category_id not matching'                                          // Providing the error type
-                ];
-            }                                                                                           // Verified that category matching category_id exists
+            if (!validateForeignKey($this->conn, 'authors', $this->author_id)) {        // If author matching author_id does not exist
+                throw new Exception('author_id Not Found');                             // Throw custom exception to controller
+            }                                                                           // Verified that author matching author_id exists
+            if (!validateForeignKey($this->conn, 'categories', $this->category_id)) {   // If category matching category_id does not exist
+                throw new Exception('category_id Not Found');                           // Throw custom exception to controller
+            }                                                                           // Verified that category matching category_id exists
             
             // Initialize query
             $createQuery = '
@@ -172,50 +150,28 @@
                     (:quote, :author_id, :category_id)
                 RETURNING
                     *;
-            ';                                                                                          // Basic insert query, uses returning so model can return affected rows back to controller
+            ';                                                                          // Basic insert query, uses returning so model can return affected rows back to controller
             
             // Prepare statement
-            $stmt = $this->conn->prepare($createQuery);                                                 // Prepare statement
+            $stmt = $this->conn->prepare($createQuery);                                 // Prepare statement
             
             // Bind values
-            $stmt->bindValue(':quote', $this->quote);                                                   // Bind quote value
-            $stmt->bindValue(':author_id', $this->author_id);                                           // Bind author_id value
-            $stmt->bindValue(':category_id', $this->category_id);                                       // Bind category_id value
+            $stmt->bindValue(':quote', $this->quote);                                   // Bind quote value
+            $stmt->bindValue(':author_id', $this->author_id);                           // Bind author_id value
+            $stmt->bindValue(':category_id', $this->category_id);                       // Bind category_id value
             
             // Execute query
-            return executeQuery($stmt);                                                                 // Execute query, returning result array
+            return $stmt->execute();                                                    // Execute query, returning result
         }
         public function update() {
             // Validate foreign keys
-            $authorValidationArr = validateForeignKey($this->conn, 'authors', $this->author_id);        // Validate that author matching author_id exists
-            if ($authorValidationArr['success'] === false) {                                            // If validation failed
-                if ($authorValidationArr['error type'] === 'execution error') {                         // And if the error type was execution error
-                    return [                                                                            // Return result array
-                        'success'    => false,                                                          // Indicating failure
-                        'error type' => 'author_id validation execution error',                         // Providing the error type
-                        'message'    => $authorValidationArr['error']                                   // And the error message
-                    ];
-                }                                                                                       // Verified that error did not occur during query execution, confirmed no rows found
-                return [                                                                                // Return the result array
-                    'success'    => false,                                                              // Indicating failure
-                    'error type' => 'author_id not matching'                                            // Providing the error type
-                ];
-            }                                                                                           // Verified that author matching author_id exists
-            $categoryValidationArr = validateForeignKey($this->conn, 'categories', $this->category_id); // Validate that category matching category_id exists
-            if ($categoryValidationArr['success'] === false) {                                          // If validation failed
-                if ($categoryValidationArr['error type'] === 'execution error') {                       // And if the error type was execution error
-                    return [                                                                            // Return result array
-                        'success'    => false,                                                          // Indicating failure
-                        'error type' => 'category_id validation execution error',                       // Providing the error type
-                        'message'    => $categoryValidationArr['error']                                 // And the error message
-                    ];
-                }                                                                                       // Verified that error did not occur during query execution, confirmed no rows found
-                return [                                                                                // Return the result array
-                    'success'    => false,                                                              // Indicating failure
-                    'error type' => 'category_id not matching'                                          // Providing the error type
-                ];
-            }                                                                                           // Verified that category matching category_id exists
-            
+            if (!validateForeignKey($this->conn, 'authors', $this->author_id)) {        // If author matching author_id does not exist
+                throw new Exception('author_id Not Found');                             // Throw custom exception to controller
+            }                                                                           // Verified that author matching author_id exists
+            if (!validateForeignKey($this->conn, 'categories', $this->category_id)) {   // If category matching category_id does not exist
+                throw new Exception('category_id Not Found');                           // Throw custom exception to controller
+            }                                                                           // Verified that category matching category_id exists
+
             // Initialize query
             $query = '
                 UPDATE
@@ -228,19 +184,19 @@
                     id = :id
                 RETURNING
                     *;
-            ';                                                      // Basic update query, uses returning so model can return affected rows back to controller
+            ';                                                                          // Basic update query, uses returning so model can return affected rows back to controller
             
             // Prepare statement
-            $stmt = $this->conn->prepare($query);                   // Prepare statement
+            $stmt = $this->conn->prepare($query);                                       // Prepare statement
             
             // Bind values
-            $stmt->bindValue(':quote', $this->quote);               // Bind quote value
-            $stmt->bindValue(':author_id', $this->author_id);       // Bind author_id value
-            $stmt->bindValue(':category_id', $this->category_id);   // Bind category_id value
-            $stmt->bindValue(':id', $this->id);                     // Bind id value
+            $stmt->bindValue(':quote', $this->quote);                                   // Bind quote value
+            $stmt->bindValue(':author_id', $this->author_id);                           // Bind author_id value
+            $stmt->bindValue(':category_id', $this->category_id);                       // Bind category_id value
+            $stmt->bindValue(':id', $this->id);                                         // Bind id value
             
             // Execute query
-            return executeQuery($stmt);                             // Execute query, returning result array
+            return $stmt->execute();                                                    // Execute query, returning result
         }
         public function delete() {
             // Initialize query
@@ -260,7 +216,7 @@
             $stmt->bindValue(':id', $this->id);     // Bind id value
             
             // Execute query
-            return executeQuery($stmt);             // Execute query, returning result array
+            return $stmt->execute();                // Execute query, returning result
         }
     }
 ?>

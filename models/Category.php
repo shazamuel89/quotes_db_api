@@ -49,7 +49,7 @@
             $stmt = $this->conn->prepare($query);   // Prepare statement
             
             // Execute query
-            return executeQuery($stmt);             // Execute query, returning result array
+            return $stmt->execute();                // Execute query, returning result
         }
         public function read_single() {
             // Initialize query
@@ -71,7 +71,7 @@
             $stmt->bindValue(':id', $this->id);     // Bind id value
             
             // Execute query
-            return executeQuery($stmt);             // Execute query, returning result array
+            return $stmt->execute();                // Execute query, returning result
         }
         public function create() {
             // Initialize query
@@ -92,7 +92,7 @@
             $stmt->bindValue(':category', $this->category); // Bind data
             
             // Execute query
-            return executeQuery($stmt);                     // Execute query, returning result array
+            return $stmt->execute();                        // Execute query, returning result
         }
         public function update() {
             // Initialize query
@@ -115,7 +115,7 @@
             $stmt->bindValue(':id', $this->id);             // Bind id value
             
             // Execute query
-            return executeQuery($stmt);                     // Execute query, returning result array
+            return $stmt->execute();                        // Execute query, returning result
         }
         public function delete() {
             // Initialize query
@@ -135,7 +135,7 @@
             $stmt->bindValue(':id', $this->id);     // Bind id value
             
             // Execute query
-            return executeQuery($stmt);             // Execute query, returning result array
+            return $stmt->execute();                // Execute query, returning result
         }
     }
 ?>

@@ -8,43 +8,47 @@
     require_once __DIR__ . '/../../functions/controller.php';
     require_once __DIR__ . '/../../models/Author.php';
 
-    // Define constants
-    define('USER_MESSAGE', 'Author lookup failed.');                                // This is a constant that defines what user readable message is output for errors
-
     // Verify input parameters were provided
-    if (!isset($_GET['id'])) {                                                      // If $_GET superglobal does not contain necessary id
-        $errorTypeArr = $errorTypesData['missing id parameter'];                    // Get individual error type's data
-        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
-        exit();                                                                     // Exit script
-    }                                                                               // Verified that ID was provided
+    if (!isset($_GET['id'])) {                                  // If $_GET superglobal does not contain necessary id
+        echo json_encode([
+            'message'   =>  'Missing Required Parameters'       // Output error message
+        ]);
+        exit();                                                 // Exit script
+    }                                                           // Verified that ID was provided
     
     // Declare and initialize objects we are using
-    $database = new Database();                                                     // Instantiate a Database object
-    $db = $database->connect();                                                     // Get the connection from the Database object
-    $author = new Author($db);                                                      // Instantiate an Author object that has the connection to the Database object
-    $author->setId($_GET['id']);                                                    // Set Author object's id (and sanitize it)
+    $database = new Database();                                 // Instantiate a Database object
+    $db = $database->connect();                                 // Get the connection from the Database object
+    $author = new Author($db);                                  // Instantiate an Author object that has the connection to the Database object
+    $author->setId($_GET['id']);                                // Set Author object's id (and sanitize it)
     
     // Execute request
-    $resultArr = $author->read_single();                                            // Get result array
-    
-    // Verify success
-    if ($resultArr['success'] === false) {                                          // If query failed
-        $errorTypeArr = $errorTypesData[$resultArr['error type']];                  // Get individual error type's data
-        echo getError($errorTypeArr, USER_MESSAGE, $resultArr['message'] ?? '');    // Output the error
-        exit();                                                                     // Exit the script
-    }                                                                               // Verified the query was a success
+    try {
+        $result = $author->read_single();                       // Lookup author entry and get result
+    } catch (PDOException $e) {                                 // If an error occurred
+        echo json_encode([
+            'message'   =>  'A database error occurred: ' . $e  // Output the error message
+        ]);
+        exit();                                                 // And exit the script
+    } catch (Exception $e) {                                    // If another error occurred
+        echo json_encode([
+            'message'   =>  $e                                  // Output the error message
+        ]);
+        exit();                                                 // And exit the script
+    }
+
     
     // Fetch results
-    $authorArr = $resultArr['data']->fetch(PDO::FETCH_ASSOC);                       // Fetch the result of read_single() as an associative array (or false if no rows)
+    $authorArr = $result->fetch(PDO::FETCH_ASSOC);              // Fetch the result of read_single() as an associative array (or false if no rows)
     
     // Verify results were fetched
-    if ($authorArr === false) {                                                     // If there were no rows found matching the id
-        $errorTypeArr = $errorTypesData['author not found'];                        // Get individual error type's data
-        echo getError($errorTypeArr, 'author_id Not Found');                                 // Output error message
-        exit();                                                                     // Exit script
-    }                                                                               // Verified that a row was found
+    if ($authorArr === false) {                                 // If there were no rows found matching the id
+        echo json_encode([
+            'message'   =>  'author_id Not Found'               // Output error message
+        ]);
+        exit();                                                 // Exit script
+    }                                                           // Verified that a row was found
     
-    // Signal success and output results
-    http_response_code(200);                                                        // Set http status code to 200 for OK
-    echo json_encode($authorArr);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the author's data
+    // Output results
+    echo json_encode($authorArr);                               // Output in json an array containing the author's data
 ?>
