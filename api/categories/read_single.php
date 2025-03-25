@@ -40,7 +40,7 @@
     // Verify results were fetched
     if ($categoryArr === false) {                                                   // If there were no rows found matching the id
         $errorTypeArr = $errorTypesData['category not found'];                      // Get individual error type's data
-        echo getError($errorTypeArr, 'No Categories Found');                                 // Output error message
+        echo getError($errorTypeArr, 'category_id Not Found');                                 // Output error message
         exit();                                                                     // Exit script
     }                                                                               // Verified that a row was found
     
