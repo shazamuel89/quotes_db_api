@@ -7,7 +7,6 @@
     
     // Require statements (using __DIR__ absolute paths to ensure they are correct)
     require_once __DIR__ . '/../../config/Database.php';
-    require_once __DIR__ . '/../../functions/controller.php';
     require_once __DIR__ . '/../../models/Quote.php';
 
     // Get input parameters
