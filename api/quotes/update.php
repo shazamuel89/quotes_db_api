@@ -72,7 +72,7 @@
     
     // Verify results were fetched
     if ($quoteArr === false) {                                                      // If query fetch returned false (meaning the id input did not match a quote's id)
-        $errorTypeArr = $errorTypesData['no quote found'];                          // Get individual error type's data
+        $errorTypeArr = $errorTypesData['quote not found'];                          // Get individual error type's data
         echo getError($errorTypeArr, 'No Quotes Found');                                 // Output error message
         exit();                                                                     // Exit script
     }                                                                               // Verified that quote was found and updated
