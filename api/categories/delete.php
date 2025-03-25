@@ -48,8 +48,5 @@
     
     // Signal success and output results
     http_response_code(200);                                                        // Set http status code to 200 for OK
-    echo json_encode([
-        'message'   =>  'Category deleted.',
-        'data'      =>  $categoryArr
-    ]);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the category's data
+    echo json_encode($categoryArr);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the category's data
 ?>

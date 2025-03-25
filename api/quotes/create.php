@@ -54,8 +54,5 @@
     
     // Signal success and output results
     http_response_code(201);                                                        // Set the http status code to 201 for successful POST
-    echo json_encode([
-        'message'   =>  'Quote created.',
-        'data'      =>  $quoteArr
-    ]);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the quote's data
+    echo json_encode($quoteArr);                                                    // Output in json an array where the key 'data' is pointing to a value which is the quote's data
 ?>

@@ -44,8 +44,5 @@
     
     // Signal success and output results
     http_response_code(201);                                                        // Set the http status code to 201 for successful POST
-    echo json_encode([
-        'message'   =>  'Author created.',
-        'data'      =>  $authorArr
-    ]);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the author's data
+    echo json_encode($authorArr);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the author's data
 ?>

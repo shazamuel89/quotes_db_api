@@ -43,8 +43,5 @@
     
     // Signal success and output results
     http_response_code(200);                                                        // Set http status code to 200 for OK
-    echo json_encode([
-        'message'   =>  'Quote found.',
-        'data'      =>  $quoteArr
-    ]);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the quote's data
+    echo json_encode($quoteArr);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the quote's data
 ?>

@@ -53,8 +53,5 @@
     
     // Signal success and output results
     http_response_code(200);                                                        // Set http status code to 200 for OK
-    echo json_encode([
-        'message'   =>  'Author updated.',
-        'data'      =>  $authorArr
-    ]);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the author's data
+    echo json_encode($authorArr);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the author's data
 ?>

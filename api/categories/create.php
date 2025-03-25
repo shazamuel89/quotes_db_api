@@ -44,8 +44,5 @@
 
     // Signal success and output results
     http_response_code(201);                                                        // Set the http status code to 201 for successful POST
-    echo json_encode([
-        'message'   =>  'Category created.',
-        'data'      =>  $categoryArr
-    ]);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the category's data
+    echo json_encode($categoryArr);                                                                             // Output in json an array where the key 'data' is pointing to a value which is the category's data
 ?>
