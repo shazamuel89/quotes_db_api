@@ -82,7 +82,7 @@
         It sets the correct http_response_code for the error type, and then it returns the json encoded array containing the information needed to give feedback for the error.
     */
     function getError($errorTypeArr, $userMessage, $errorMessage = '') {
-        http_response_code($errorTypeArr['http_response_code']);        // Set HTTP Status Code to appropriate value
+        // http_response_code($errorTypeArr['http_response_code']);        // Set HTTP Status Code to appropriate value
         return json_encode([                                            // Return a json encoded array
             'message'   =>  $userMessage,                               // With a user readable message
             'error'     =>  $errorTypeArr['message'] . $errorMessage    // And the situational message concatenated with the specific error message if provided

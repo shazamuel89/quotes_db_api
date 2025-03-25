@@ -14,7 +14,8 @@
     // Verify input parameters were provided
     if (!isset($_GET['id'])) {                                                      // If $_GET superglobal does not contain necessary id
         $errorTypeArr = $errorTypesData['missing id parameter'];                    // Get individual error type's data
-        die(getError($errorTypeArr, USER_MESSAGE));                                 // Kill script while outputting error message
+        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        exit();                                                                     // Exit script
     }                                                                               // Verified that ID was provided
     
     // Declare and initialize objects we are using
@@ -29,7 +30,8 @@
     // Verify success
     if ($resultArr['success'] === false) {                                          // If query failed
         $errorTypeArr = $errorTypesData[$resultArr['error type']];                  // Get individual error type's data
-        die(getError($errorTypeArr, USER_MESSAGE, $resultArr['message'] ?? ''));    // Return the error
+        echo getError($errorTypeArr, USER_MESSAGE, $resultArr['message'] ?? '');    // Output the error
+        exit();                                                                     // Exit the script
     }                                                                               // Verified the query was a success
     
     // Fetch results
@@ -38,7 +40,8 @@
     // Verify results were fetched
     if ($authorArr === false) {                                                     // If there were no rows found matching the id
         $errorTypeArr = $errorTypesData['author not found'];                        // Get individual error type's data
-        die(getError($errorTypeArr, USER_MESSAGE));                                 // Kill script while outputting error message
+        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        exit();                                                                     // Exit script
     }                                                                               // Verified that a row was found
     
     // Signal success and output results

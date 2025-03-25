@@ -19,11 +19,13 @@
     // Verify input parameters were provided
     if (!isset($data->id)) {                                                        // If the id value wasn't provided
         $errorTypeArr = $errorTypesData['missing id parameter'];                    // Get individual error type's data
-        die(getError($errorTypeArr, USER_MESSAGE));                                 // Kill script while outputting error message
+        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        exit();                                                                     // Exit script
     }                                                                               // Verified id parameter was provided
     if (!isset($data->category)) {                                                  // If the category value wasn't provided
         $errorTypeArr = $errorTypesData['missing category parameter'];              // Get individual error type's data
-        die(getError($errorTypeArr, USER_MESSAGE));                                 // Kill script while outputting error message
+        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        exit();                                                                     // Exit script
     }                                                                               // Verified category parameter was provided
     
     // Declare and initialize objects we are using
@@ -39,7 +41,8 @@
     // Verify success
     if ($resultArr['success'] === false) {                                          // If query failed
         $errorTypeArr = $errorTypesData[$resultArr['error type']];                  // Get individual error type's data
-        die(getError($errorTypeArr, USER_MESSAGE, $resultArr['message'] ?? ''));    // Return the error
+        echo getError($errorTypeArr, USER_MESSAGE, $resultArr['message'] ?? '');    // Output the error
+        exit();                                                                     // Exit the script
     }                                                                               // Verified the query was a success
     
     // Fetch results
@@ -48,7 +51,8 @@
     // Verify results were fetched
     if ($categoryArr === false) {                                                   // If query fetch returned false (meaning the id input did not match a category's id)
         $errorTypeArr = $errorTypesData['no category found'];                       // Get individual error type's data
-        die(getError($errorTypeArr, USER_MESSAGE));                                 // Kill script while outputting error message
+        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        exit();                                                                     // Exit script
     }                                                                               // Verified that category was found and updated
     
     // Signal success and output results

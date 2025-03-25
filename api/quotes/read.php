@@ -30,7 +30,8 @@
     // Verify success
     if ($resultArr['success'] === false) {                                          // If query failed
         $errorTypeArr = $errorTypesData[$resultArr['error type']];                  // Get individual error type's data
-        die(getError($errorTypeArr, USER_MESSAGE, $resultArr['message'] ?? ''));    // Return the error
+        echo getError($errorTypeArr, USER_MESSAGE, $resultArr['message'] ?? '');    // Output the error
+        exit();                                                                     // Exit the script
     }                                                                               // Verified the query was a success
     
     // Fetch results
@@ -39,7 +40,8 @@
     // Verify results were fetched
     if (count($quotesArr) === 0) {                                                  // If there were no results from read query
         $errorTypeArr = $errorTypesData['quote not found'];                         // Get individual error type's data
-        die(getError($errorTypeArr, USER_MESSAGE));                                 // Kill script while outputting error message
+        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        exit();                                                                     // Exit script
     }                                                                               // Verified that rows were found
     
     // Signal success and output results
