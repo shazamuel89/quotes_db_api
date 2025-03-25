@@ -40,7 +40,7 @@
     // Verify results were fetched
     if ($quoteArr === false) {                                                      // If there were no rows found matching the id
         $errorTypeArr = $errorTypesData['quote not found'];                         // Get individual error type's data
-        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        echo getError($errorTypeArr, 'No Quotes Found');                                 // Output error message
         exit();                                                                     // Exit script
     }                                                                               // Verified that a row was found
     

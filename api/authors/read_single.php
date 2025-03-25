@@ -40,7 +40,7 @@
     // Verify results were fetched
     if ($authorArr === false) {                                                     // If there were no rows found matching the id
         $errorTypeArr = $errorTypesData['author not found'];                        // Get individual error type's data
-        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        echo getError($errorTypeArr, 'No Authors Found');                                 // Output error message
         exit();                                                                     // Exit script
     }                                                                               // Verified that a row was found
     
