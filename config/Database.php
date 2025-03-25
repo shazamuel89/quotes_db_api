@@ -1,5 +1,5 @@
 <?php
-/* // This is for online connection
+    // This is for online connection
     class Database {
         
         private $host;
@@ -34,8 +34,8 @@
             }
         }
     }
-*/
 
+/*
 // This is for local connection
 class Database {
     // Properties
@@ -59,4 +59,5 @@ class Database {
         return $this->conn;
     }
 }
+*/
 ?>
