@@ -23,13 +23,13 @@
         exit();                                                                     // Exit script
     }                                                                               // Verified quote parameter was provided
     if (!isset($data->author_id)) {                                                 // If the author_id value wasn't provided
-        $errorTypeArr = $errorTypesData['Missing Required Parameters'];             // Get individual error type's data
-        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        $errorTypeArr = $errorTypesData['missing author_id parameter'];             // Get individual error type's data
+        echo getError($errorTypeArr, 'Missing Required Parameters');                                 // Output error message
         exit();                                                                     // Exit script
     }                                                                               // Verified author_id parameter was provided
     if (!isset($data->category_id)) {                                               // If the category_id value wasn't provided
-        $errorTypeArr = $errorTypesData['Missing Required Parameters'];           // Get individual error type's data
-        echo getError($errorTypeArr, USER_MESSAGE);                                 // Output error message
+        $errorTypeArr = $errorTypesData['missing category_id parameter'];           // Get individual error type's data
+        echo getError($errorTypeArr, 'Missing Required Parameters');                                 // Output error message
         exit();                                                                     // Exit script
     }                                                                               // Verified category_id parameter was provided
     
