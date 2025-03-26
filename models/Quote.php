@@ -98,7 +98,9 @@
             }
             
             // Execute query
-            return $stmt->execute();                                    // Execute query, returning result
+            if ($stmt->execute()) {                                     // Execute query, and if it is successful
+                return $stmt;                                           // Return the stmt
+            }
         }
         public function read_single() {
             // Initialize query
@@ -130,7 +132,9 @@
             $stmt->bindValue(':id', $this->id);     // Bind id value
             
             // Execute query
-            return $stmt->execute();                // Execute query, returning result
+            if ($stmt->execute()) {                 // Execute query, and if it is successful
+                return $stmt;                       // Return the stmt
+            }
         }
         public function create() {
             // Validate foreign keys
@@ -161,7 +165,9 @@
             $stmt->bindValue(':category_id', $this->category_id);                       // Bind category_id value
             
             // Execute query
-            return $stmt->execute();                                                    // Execute query, returning result
+            if ($stmt->execute()) {                                                     // Execute query, and if it is successful
+                return $stmt;                                                           // Return the stmt
+            }
         }
         public function update() {
             // Validate foreign keys
@@ -196,7 +202,9 @@
             $stmt->bindValue(':id', $this->id);                                         // Bind id value
             
             // Execute query
-            return $stmt->execute();                                                    // Execute query, returning result
+            if ($stmt->execute()) {                                                     // Execute query, and if it is successful
+                return $stmt;                                                           // Return the stmt
+            }
         }
         public function delete() {
             // Initialize query
@@ -216,7 +224,9 @@
             $stmt->bindValue(':id', $this->id);     // Bind id value
             
             // Execute query
-            return $stmt->execute();                // Execute query, returning result
+            if ($stmt->execute()) {                 // Execute query, and if it is successful
+                return $stmt;                       // Return the stmt
+            }
         }
     }
 ?>
