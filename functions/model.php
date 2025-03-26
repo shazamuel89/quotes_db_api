@@ -16,10 +16,11 @@
             ';                                                  // This query is to check if the row with given id exists
             $stmt = $conn->prepare($query);                     // Prepare statement
             $stmt->bindValue(':id', $id);                       // Bind id value
-            $result = executeQuery($stmt);                      // Execute query, getting result array
-            if ($result->fetch(PDO::FETCH_ASSOC) === false) {   // If row with given id was not found
-                return false;                                   // Return false
-            }                                                   // Validated given id matches an existing row
-            return true;                                        // Return true for row found
+            if ($stmt->execute()) {                             // If stmt executes successfully
+                if ($stmt->fetch(PDO::FETCH_ASSOC) === false) { // If row with given id was not found
+                    return false;                               // Return false
+                }                                               // Validated given id matches an existing row
+                return true;                                    // Return true for row found
+            }
     }
 ?>

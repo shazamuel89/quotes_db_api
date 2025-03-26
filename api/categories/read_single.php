@@ -42,7 +42,7 @@
     // Verify results were fetched
     if ($categoryArr === false) {                               // If there were no rows found matching the id
         echo json_encode([
-            'message'   =>  'No Categories Found'               // Output error message
+            'message'   =>  'category_id Not Found'             // Output error message
         ]);
         exit();                                                 // Exit script
     }                                                           // Verified that a row was found
